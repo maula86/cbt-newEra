@@ -1,0 +1,6 @@
+{
+  "name": "CBT Admin Portal",
+  "description": "Panel Administrasi Computer Based Test terpusat untuk manajemen Master Data, Bank Soal, Event Ujian, Peserta, dan Analisis Nilai.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
