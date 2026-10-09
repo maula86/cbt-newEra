@@ -1074,7 +1074,7 @@ export function ButirSoalView() {
 
       {/* FORM MODAL BUAT / EDIT BUTIR SOAL */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent maxWidth="max-w-3xl">
+        <DialogContent maxWidth="max-w-3xl overflow-y-auto h-[calc(100vh-5rem)]">
           <form onSubmit={handleSubmit} className="space-y-4">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-base font-bold text-foreground">

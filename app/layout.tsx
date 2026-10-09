@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased min-h-screen bg-background text-foreground`}>
+      <body suppressHydrationWarning className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased min-h-screen overflow-y-hidden bg-background text-foreground`}>
         {children}
       </body>
     </html>

@@ -1432,7 +1432,7 @@ export function PaketSoalView() {
 
       {/* POP-UP MODAL: BUAT BUTIR SOAL BARU (PERSIS KOMPONEN DI MENU BUTIR SOAL) */}
       <Dialog open={createModalOpen} onOpenChange={setCreateModalOpen}>
-        <DialogContent maxWidth="max-w-3xl">
+        <DialogContent maxWidth="max-w-3xl overflow-y-auto h-[calc(100vh-5rem)]">
           <form onSubmit={handleConfirmCreateQuestion} className="space-y-4">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-base font-bold text-foreground">

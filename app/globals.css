@@ -174,14 +174,14 @@
   * {
     @apply border-border outline-ring/50;
     scrollbar-width: thin;
-    scrollbar-color: #ff810a transparent;
+    scrollbar-color: var(--primary) transparent;
   }
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
 
-  /* Universal Scrollbar Indicator tuned to #ff810a */
+  /* Universal Scrollbar Indicator tuned to var(--primary) */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -192,12 +192,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #ff810a;
+    background: var(--primary);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #e06d00;
+    background: var(--chart-1);
   }
 
   ::-webkit-scrollbar-corner {
