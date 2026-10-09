@@ -269,7 +269,15 @@ function SoalEventContent() {
                       <td className="p-3 text-muted-foreground">{item.subject}</td>
                       <td className="p-3">
                         <span className="px-1.5 py-0.5 rounded text-[11px] font-semibold bg-muted text-foreground border border-border">
-                          {item.questionType}
+                          {item.questionType === 'PG'
+                            ? 'PG'
+                            : item.questionType === 'MULTI_CHOICE'
+                            ? 'Multi Choice'
+                            : item.questionType === 'PERNYATAAN'
+                            ? 'Pernyataan'
+                            : item.questionType === 'PENJODOHAN'
+                            ? 'Penjodohan'
+                            : 'Esai'}
                         </span>
                       </td>
                       <td className="p-3">
@@ -336,14 +344,17 @@ function SoalEventContent() {
                   ))}
                 </Select>
               </div>
-              <div className="w-28">
+              <div className="w-36">
                 <Select
                   value={modalTypeFilter}
                   onChange={(e) => setModalTypeFilter(e.target.value)}
                   className="h-8 text-xs"
                 >
                   <option value="all">Semua Tipe</option>
-                  <option value="PG">PG</option>
+                  <option value="PG">Pilihan Ganda</option>
+                  <option value="MULTI_CHOICE">Multi Choice</option>
+                  <option value="PERNYATAAN">Pernyataan</option>
+                  <option value="PENJODOHAN">Penjodohan</option>
                   <option value="ESAI">Esai</option>
                 </Select>
               </div>

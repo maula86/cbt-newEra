@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { Plus, Edit2, Trash2, DoorOpen, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { DataTable, ColumnDef } from '@/components/shared/data-table';
 import { ConfirmationDialog } from '@/components/shared/confirmation-dialog';
@@ -20,8 +21,13 @@ import { useMasterStore } from '@/store/useMasterStore';
 import { EducationalLevel } from '@/types';
 
 export default function JenjangPage() {
-  const { educationalLevels, addEducationalLevel, updateEducationalLevel, deleteEducationalLevel } =
-    useMasterStore();
+  const {
+    educationalLevels,
+    classes,
+    addEducationalLevel,
+    updateEducationalLevel,
+    deleteEducationalLevel,
+  } = useMasterStore();
 
   const [formOpen, setFormOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
@@ -92,6 +98,28 @@ export default function JenjangPage() {
       cell: (row) => (
         <span className="text-xs font-semibold">{row.defaultPassingGrade} / 100</span>
       ),
+    },
+    {
+      header: 'Rombongan Belajar (Kelas)',
+      cell: (row) => {
+        const count = classes.filter(
+          (c) => c.levelId === row.id || c.levelCode === row.code
+        ).length;
+        return (
+          <Link href={`/master/kelas?levelId=${row.id}&levelCode=${row.code}`}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-semibold gap-1.5 hover:border-primary hover:text-primary transition-colors"
+              title={`Buka menu Kelas dengan filter otomatis untuk Jenjang ${row.name}`}
+            >
+              <DoorOpen className="h-3.5 w-3.5 text-primary" />
+              <span>Lihat Kelas ({count})</span>
+              <ArrowRight className="h-3 w-3 text-muted-foreground" />
+            </Button>
+          </Link>
+        );
+      },
     },
     {
       header: 'Aksi',

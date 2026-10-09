@@ -6,22 +6,110 @@ export interface QuestionOption {
   key: QuestionOptionLetter;
   text: string;
   isCorrect: boolean;
+  points?: number;
+}
+
+export type QuestionTypeEnum = 'PG' | 'MULTI_CHOICE' | 'PERNYATAAN' | 'PENJODOHAN' | 'ESAI';
+
+// Multi Choice Option
+export interface MultiChoiceOption {
+  key: string;
+  text: string;
+  isCorrect: boolean;
+  points?: number;
+}
+
+// Statement (Pernyataan) Types: Benar/Salah, Ya/Tidak, Setuju/Tidak, Sesuai/Tidak, Fakta/Opini, Dinamis
+export type StatementPreset =
+  | 'BENAR_SALAH'
+  | 'YA_TIDAK'
+  | 'SETUJU_TIDAK'
+  | 'SESUAI_TIDAK'
+  | 'FAKTA_OPINI'
+  | 'DINAMIS';
+
+export interface StatementItem {
+  id: string;
+  statement: string;
+  correctAnswer: string;
+  points?: number;
+}
+
+export interface StatementConfig {
+  preset: StatementPreset;
+  option1: string;
+  option2: string;
+  items: StatementItem[];
+}
+
+// Matching (Penjodohan) Types
+export interface MatchingPair {
+  id: string;
+  leftText: string;
+  rightText: string;
+  points?: number;
+}
+
+export interface MatchingConfig {
+  pairs: MatchingPair[];
 }
 
 export interface QuestionItem {
   id: string;
   code: string;
   subject: string;
-  type: 'PG' | 'ESAI'; // Pilihan Ganda or Esai
+  type: QuestionTypeEnum;
   difficulty: 'Mudah' | 'Sedang' | 'Sukar';
   prompt: string;
+
+  // Dynamic scoring mode:
+  // 'TOTAL': 1 butir soal memiliki bobot Point tunggal
+  // 'PER_SUB': butir soal yang memiliki Sub memiliki bobot Point masing-masing
+  scoringMode?: 'TOTAL' | 'PER_SUB';
+  defaultPoints: number;
+
+  // Single choice (PG):
   options?: QuestionOption[];
   correctAnswer?: QuestionOptionLetter;
-  rubric?: string; // For Essay
-  defaultPoints: number;
+
+  // Multi choice:
+  multiOptions?: MultiChoiceOption[];
+  correctAnswersMulti?: string[];
+
+  // Pernyataan (Benar/Salah, Ya/Tidak, Setuju/Tidak, Dinamis):
+  statementConfig?: StatementConfig;
+
+  // Penjodohan:
+  matchingConfig?: MatchingConfig;
+
+  // Essay:
+  rubric?: string;
+
   tags: string[];
   createdAt: string;
   author: string;
+  status?: 'active' | 'inactive';
+}
+
+export interface SubTopic {
+  id: string;
+  name: string;
+  description?: string;
+  orderNumber: number;
+  questionIds: string[];
+}
+
+export interface QuestionPackage {
+  id: string;
+  code: string;
+  name: string;
+  subject: string;
+  level?: string;
+  academicYear?: string;
+  description?: string;
+  status: 'active' | 'draft' | 'archived';
+  subTopics: SubTopic[];
+  createdAt: string;
 }
 
 export interface ExamRules {
@@ -61,7 +149,7 @@ export interface EventQuestionAssignment {
   customScoreWeight?: number;
   // Denormalized for rapid preview
   questionPrompt: string;
-  questionType: 'PG' | 'ESAI';
+  questionType: QuestionTypeEnum;
   subject: string;
   difficulty: 'Mudah' | 'Sedang' | 'Sukar';
 }

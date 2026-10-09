@@ -11,6 +11,7 @@ import {
   QuestionType,
   TestType,
   WeightConfig,
+  ClassRoom,
 } from '@/types';
 import {
   mockSchools,
@@ -23,6 +24,7 @@ import {
   mockQuestionTypes,
   mockTestTypes,
   mockWeightConfigs,
+  mockClasses,
 } from '@/lib/mock-data';
 
 interface MasterState {
@@ -36,6 +38,12 @@ interface MasterState {
   questionTypes: QuestionType[];
   testTypes: TestType[];
   weightConfigs: WeightConfig[];
+  classes: ClassRoom[];
+
+  // Class actions
+  addClass: (data: Omit<ClassRoom, 'id'>) => void;
+  updateClass: (id: string, data: Partial<ClassRoom>) => void;
+  deleteClass: (id: string) => void;
 
   // School actions
   addSchool: (school: Omit<School, 'id' | 'createdAt'>) => void;
@@ -91,6 +99,31 @@ interface MasterState {
   resetMasterData: () => void;
 }
 
+export const normalizePassingGrade = (pg: PassingGradeConfig): PassingGradeConfig => {
+  const rawScore = Number(pg.score ?? pg.minimumScore);
+  const score = !isNaN(rawScore) && rawScore > 0 ? rawScore : 650;
+  const rawCapacity = Number(pg.capacity);
+  const capacity = !isNaN(rawCapacity) && rawCapacity > 0 ? rawCapacity : 60;
+  const rawApplicants = Number(pg.applicantCount);
+  const applicantCount = !isNaN(rawApplicants) && rawApplicants > 0 ? rawApplicants : 1200;
+
+  return {
+    ...pg,
+    majorCode: pg.majorCode || `3${Math.floor(10000 + Math.random() * 90000)}`,
+    cluster: pg.cluster || 'Saintek',
+    ptnName: pg.ptnName || 'Universitas Indonesia',
+    majorName: pg.majorName || pg.subject || 'Pendidikan Dokter',
+    score,
+    capacity,
+    applicantCount,
+    competitionRate: pg.competitionRate || `${((capacity / applicantCount) * 100).toFixed(2)}%`,
+    degreeLevel: pg.degreeLevel || 'S1',
+    accreditation: pg.accreditation || 'Unggul',
+    province: pg.province || 'DKI Jakarta',
+    status: pg.status || 'active',
+  };
+};
+
 export const useMasterStore = create<MasterState>()(
   persist(
     (set) => ({
@@ -100,10 +133,31 @@ export const useMasterStore = create<MasterState>()(
       educationalLevels: mockEducationalLevels,
       examTypes: mockExamTypes,
       userRoles: mockUserRoles,
-      passingGrades: mockPassingGrades,
+      passingGrades: mockPassingGrades.map(normalizePassingGrade),
       questionTypes: mockQuestionTypes,
       testTypes: mockTestTypes,
       weightConfigs: mockWeightConfigs,
+      classes: mockClasses,
+
+      addClass: (data) =>
+        set((state) => ({
+          classes: [
+            {
+              ...data,
+              id: `cls-${Date.now()}`,
+              createdAt: new Date().toISOString().split('T')[0],
+            },
+            ...state.classes,
+          ],
+        })),
+      updateClass: (id, data) =>
+        set((state) => ({
+          classes: state.classes.map((item) => (item.id === id ? { ...item, ...data } : item)),
+        })),
+      deleteClass: (id) =>
+        set((state) => ({
+          classes: state.classes.filter((item) => item.id !== id),
+        })),
 
       addSchool: (school) =>
         set((state) => ({
@@ -207,11 +261,19 @@ export const useMasterStore = create<MasterState>()(
 
       addPassingGrade: (data) =>
         set((state) => ({
-          passingGrades: [{ ...data, id: `pg-${Date.now()}` }, ...state.passingGrades],
+          passingGrades: [
+            normalizePassingGrade({
+              ...data,
+              id: `pg-${Date.now()}`,
+            }),
+            ...state.passingGrades,
+          ],
         })),
       updatePassingGrade: (id, data) =>
         set((state) => ({
-          passingGrades: state.passingGrades.map((item) => (item.id === id ? { ...item, ...data } : item)),
+          passingGrades: state.passingGrades.map((item) =>
+            item.id === id ? normalizePassingGrade({ ...item, ...data }) : item
+          ),
         })),
       deletePassingGrade: (id) =>
         set((state) => ({
@@ -265,14 +327,28 @@ export const useMasterStore = create<MasterState>()(
           educationalLevels: mockEducationalLevels,
           examTypes: mockExamTypes,
           userRoles: mockUserRoles,
-          passingGrades: mockPassingGrades,
+          passingGrades: mockPassingGrades.map(normalizePassingGrade),
           questionTypes: mockQuestionTypes,
           testTypes: mockTestTypes,
           weightConfigs: mockWeightConfigs,
+          classes: mockClasses,
         }),
     }),
     {
       name: 'cbt-master-storage',
+      version: 3,
+      migrate: (persistedState: any, version: number) => {
+        if (!persistedState) return persistedState;
+        const rawPassingGrades = persistedState.passingGrades || [];
+        const hasPTNData = rawPassingGrades.some((pg: any) => pg?.majorCode && pg?.score);
+        return {
+          ...persistedState,
+          passingGrades: hasPTNData
+            ? rawPassingGrades.map(normalizePassingGrade)
+            : mockPassingGrades.map(normalizePassingGrade),
+          classes: persistedState.classes || mockClasses,
+        };
+      },
     }
   )
 );

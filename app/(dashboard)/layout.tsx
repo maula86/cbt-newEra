@@ -41,9 +41,9 @@ export default function DashboardLayout({
         />
 
         {/* Outer Main Content: 100% FIXED, NO SCROLL Y (Hapus Scroll Y - jadikan Ukuran Fixing) */}
-        <main className="flex-1 min-h-0 h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-hidden min-w-0 flex flex-col">
+        <main className="flex-1 min-h-0 h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-hidden min-w-0 flex flex-col w-full">
           {/* Inner Main Content: SCROLLS Y (main Content Dalam dapat diScroll) */}
-          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 pb-16 [scrollbar-width:thin] [scrollbar-color:#ff810a_transparent] animate-in fade-in duration-200">
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden w-full max-w-none p-4 sm:p-6 lg:p-8 pb-16 [scrollbar-width:thin] [scrollbar-color:#ff810a_transparent] animate-in fade-in duration-200">
             {children}
           </div>
         </main>

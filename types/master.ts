@@ -61,14 +61,32 @@ export interface UserRole {
   isSystem: boolean;
 }
 
+export type ClusterType = 'Saintek' | 'Soshum' | 'Campuran' | 'Vokasi';
+
 export interface PassingGradeConfig {
   id: string;
-  subject: string;
-  levelId: string;
-  levelName: string;
-  minimumScore: number;
-  maximumScore: number;
-  remedialThreshold: number;
+  majorCode: string; // Kode Jurusan / Prodi (e.g. "311101")
+  cluster: ClusterType; // Kelompok (Saintek, Soshum, Campuran, Vokasi)
+  ptnName: string; // Nama PTN (e.g. "Universitas Indonesia")
+  majorName: string; // Nama Jurusan (e.g. "Pendidikan Dokter")
+  score: number; // Nilai Passing Grade / Skor Aman UTBK
+  capacity: number; // Daya Tampung (Kuota)
+
+  // Real-case extras:
+  applicantCount?: number; // Jumlah Peminat Tahun Lalu
+  competitionRate?: string; // Keketatan / Rasio Persaingan (e.g. "4.08%")
+  degreeLevel?: 'S1' | 'D4' | 'D3'; // Jenjang Program
+  accreditation?: 'Unggul' | 'A' | 'Baik Sekali' | 'Baik';
+  province?: string;
+  status?: 'active' | 'inactive';
+
+  // Backward compatibility fields:
+  subject?: string;
+  levelId?: string;
+  levelName?: string;
+  minimumScore?: number;
+  maximumScore?: number;
+  remedialThreshold?: number;
 }
 
 export interface QuestionType {
@@ -96,4 +114,23 @@ export interface WeightConfig {
   essayWeight: number; // e.g. 30
   penaltyWrongAnswer: number; // 0 or -1
   scorePerQuestion: number;
+}
+
+export interface ClassRoom {
+  id: string;
+  code: string; // e.g. "XII-MIPA-1"
+  name: string; // e.g. "XII MIPA 1"
+  grade: number; // 1 to 12
+  levelId: string; // ID of EducationalLevel ("lvl-3")
+  levelCode: string; // "SD" | "SMP" | "SMA" | "SMK"
+  levelName: string;
+  schoolId: string;
+  schoolName: string;
+  major?: string; // "MIPA", "IPS", "TKJ", "RPL", "Umum"
+  capacity: number;
+  studentCount: number;
+  homeroomTeacher: string;
+  academicYear: string;
+  status: 'active' | 'inactive';
+  createdAt?: string;
 }

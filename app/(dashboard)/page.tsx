@@ -21,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { PageHeader } from '@/components/shared/page-header';
+import { OperationalCalendar } from '@/components/dashboard/operational-calendar';
 import { useMasterStore } from '@/store/useMasterStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useExamStore } from '@/store/useExamStore';
@@ -134,6 +135,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* 50-Day Operational Exam Calendar (10 Hari Bulan Kemarin, 30 Hari Bulan Ini, 10 Hari Bulan Depan) */}
+      <OperationalCalendar />
 
       {/* Main Grid: Live Events & Quick Workflows */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

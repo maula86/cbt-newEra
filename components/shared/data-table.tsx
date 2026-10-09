@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils';
 export interface ColumnDef<T> {
   header: string;
   accessorKey?: keyof T | string;
-  cell?: (row: T) => React.ReactNode;
+  cell?: (row: T, index?: number) => React.ReactNode;
   sortable?: boolean;
   className?: string;
 }
@@ -281,7 +281,7 @@ export function DataTable<T extends Record<string, any>>({
                     {columns.map((col, colIdx) => (
                       <TableCell key={colIdx} className={col.className}>
                         {col.cell
-                          ? col.cell(row)
+                          ? col.cell(row, (currentPage - 1) * pageSize + rowIdx)
                           : col.accessorKey
                           ? String(row[col.accessorKey as keyof T] ?? '')
                           : null}

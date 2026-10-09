@@ -14,6 +14,7 @@ import {
   FileQuestion,
   ListOrdered,
   ArrowRight,
+  DoorOpen,
 } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Card, CardContent } from '@/components/ui/card';
@@ -31,6 +32,7 @@ export default function MasterHubPage() {
     questionTypes,
     testTypes,
     weightConfigs,
+    classes,
   } = useMasterStore();
 
   const masterCards = [
@@ -61,6 +63,13 @@ export default function MasterHubPage() {
       count: `${educationalLevels.length} Jenjang`,
       href: '/master/jenjang',
       icon: Layers,
+    },
+    {
+      title: 'Kelas',
+      description: 'Rombongan belajar, tingkat kelas, jurusan, dan wali kelas.',
+      count: `${classes.length} Rombel`,
+      href: '/master/kelas',
+      icon: DoorOpen,
     },
     {
       title: 'Tipe Ujian',

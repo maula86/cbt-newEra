@@ -26,6 +26,8 @@ import {
   Award,
   ListOrdered,
   FileQuestion,
+  DoorOpen,
+  CalendarCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useConfigStore } from '@/store/useConfigStore';
@@ -47,10 +49,21 @@ interface NavGroup {
   }[];
 }
 
+const pesertaSubMenus = [
+  { title: 'Peserta PerEvent', href: '/peserta/per-event', icon: CalendarCheck },
+  { title: 'Seluruh Peserta', href: '/peserta/seluruh', icon: Users },
+];
+
+const bankSoalSubMenus = [
+  { title: 'Paket Soal', href: '/bank-soal/paket', icon: Layers },
+  { title: 'Butir Soal', href: '/bank-soal/butir', icon: FileQuestion },
+];
+
 const masterSubMenus = [
   { title: 'Config Bobot', href: '/master/config-bobot', icon: SlidersHorizontal },
   { title: 'Tahun Pelajaran', href: '/master/tahun-pelajaran', icon: CalendarDays },
   { title: 'Jenjang', href: '/master/jenjang', icon: Layers },
+  { title: 'Kelas', href: '/master/kelas', icon: DoorOpen },
   { title: 'Tipe Ujian', href: '/master/tipe-ujian', icon: Target },
   { title: 'Sekolah', href: '/master/sekolah', icon: School },
   { title: 'Cabang', href: '/master/cabang', icon: Building2 },
@@ -89,6 +102,16 @@ export function AppSidebar({
   const isMasterActive = pathname.startsWith('/master');
   const [manualMasterOpen, setManualMasterOpen] = React.useState<boolean | null>(null);
   const isMasterOpen = manualMasterOpen !== null ? manualMasterOpen : true;
+
+  // Check if current route is within peserta section
+  const isPesertaActive = pathname.startsWith('/peserta');
+  const [manualPesertaOpen, setManualPesertaOpen] = React.useState<boolean | null>(null);
+  const isPesertaOpen = manualPesertaOpen !== null ? manualPesertaOpen : (isPesertaActive || true);
+
+  // Check if current route is within bank-soal section
+  const isBankSoalActive = pathname.startsWith('/bank-soal');
+  const [manualBankSoalOpen, setManualBankSoalOpen] = React.useState<boolean | null>(null);
+  const isBankSoalOpen = manualBankSoalOpen !== null ? manualBankSoalOpen : (isBankSoalActive || true);
 
   return (
     <>
@@ -227,7 +250,147 @@ export function AppSidebar({
                   Operasional Ujian
                 </div>
               )}
-              {mainNavItems.slice(1, 7).map((item) => {
+              {/* Pegawai & Guru */}
+              {(() => {
+                const item = mainNavItems[1];
+                const Icon = item.icon;
+                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={onCloseMobile}
+                    className={cn(
+                      'group flex items-center gap-3 rounded-lg px-3 py-2 text-xs transition-colors select-none',
+                      isActive
+                        ? 'bg-primary/10 text-primary font-bold border-l-2 border-primary shadow-2xs'
+                        : 'text-foreground/80 hover:bg-muted/70 hover:text-foreground font-medium',
+                      isCollapsed && 'justify-center px-0'
+                    )}
+                    title={isCollapsed ? item.title : undefined}
+                  >
+                    <Icon className={cn('h-4 w-4 shrink-0 transition-colors', isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground')} />
+                    {!isCollapsed && <span className="truncate">{item.title}</span>}
+                  </Link>
+                );
+              })()}
+
+              {/* Collapsible Data Peserta Menu */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => setManualPesertaOpen(!isPesertaOpen)}
+                  className={cn(
+                    'group flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs transition-colors cursor-pointer select-none',
+                    isPesertaActive
+                      ? 'text-primary font-bold bg-primary/5 border-l-2 border-primary'
+                      : 'text-foreground/80 hover:bg-muted/70 hover:text-foreground font-medium',
+                    isCollapsed && 'justify-center px-0'
+                  )}
+                  title={isCollapsed ? 'Data Peserta' : undefined}
+                >
+                  <div className="flex items-center gap-3">
+                    <GraduationCap className={cn('h-4 w-4 shrink-0 transition-colors', isPesertaActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground')} />
+                    {!isCollapsed && <span>Data Peserta</span>}
+                  </div>
+                  {!isCollapsed && (
+                    <ChevronDown
+                      className={cn(
+                        'h-3.5 w-3.5 text-muted-foreground transition-transform duration-200',
+                        isPesertaOpen && 'rotate-180'
+                      )}
+                    />
+                  )}
+                </button>
+
+                {/* Sub-menu tree */}
+                {isPesertaOpen && !isCollapsed && (
+                  <div className="ml-4 mt-1 space-y-0.5 border-l border-border/70 pl-2.5">
+                    {pesertaSubMenus.map((sub) => {
+                      const SubIcon = sub.icon;
+                      const isSubActive =
+                        pathname === sub.href ||
+                        (sub.href === '/peserta/seluruh' && pathname === '/peserta');
+                      return (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          onClick={onCloseMobile}
+                          className={cn(
+                            'group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[11px] transition-colors',
+                            isSubActive
+                              ? 'bg-primary/10 text-primary font-bold'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-muted/60 font-medium'
+                          )}
+                        >
+                          <SubIcon className={cn('h-3.5 w-3.5 shrink-0 transition-colors', isSubActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground')} />
+                          <span className="truncate">{sub.title}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Collapsible Bank Soal Menu */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => setManualBankSoalOpen(!isBankSoalOpen)}
+                  className={cn(
+                    'group flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs transition-colors cursor-pointer select-none',
+                    isBankSoalActive
+                      ? 'text-primary font-bold bg-primary/5 border-l-2 border-primary'
+                      : 'text-foreground/80 hover:bg-muted/70 hover:text-foreground font-medium',
+                    isCollapsed && 'justify-center px-0'
+                  )}
+                  title={isCollapsed ? 'Bank Soal' : undefined}
+                >
+                  <div className="flex items-center gap-3">
+                    <BookOpen className={cn('h-4 w-4 shrink-0 transition-colors', isBankSoalActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground')} />
+                    {!isCollapsed && <span>Bank Soal</span>}
+                  </div>
+                  {!isCollapsed && (
+                    <ChevronDown
+                      className={cn(
+                        'h-3.5 w-3.5 text-muted-foreground transition-transform duration-200',
+                        isBankSoalOpen && 'rotate-180'
+                      )}
+                    />
+                  )}
+                </button>
+
+                {/* Sub-menu tree for Bank Soal */}
+                {isBankSoalOpen && !isCollapsed && (
+                  <div className="ml-4 mt-1 space-y-0.5 border-l border-border/70 pl-2.5">
+                    {bankSoalSubMenus.map((sub) => {
+                      const SubIcon = sub.icon;
+                      const isSubActive =
+                        pathname === sub.href ||
+                        (sub.href === '/bank-soal/butir' && pathname === '/bank-soal');
+                      return (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          onClick={onCloseMobile}
+                          className={cn(
+                            'group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[11px] transition-colors',
+                            isSubActive
+                              ? 'bg-primary/10 text-primary font-bold'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-muted/60 font-medium'
+                          )}
+                        >
+                          <SubIcon className={cn('h-3.5 w-3.5 shrink-0 transition-colors', isSubActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground')} />
+                          <span className="truncate">{sub.title}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Other Operasional: Event Ujian, Pendaftaran, Soal Event */}
+              {mainNavItems.slice(4, 7).map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
