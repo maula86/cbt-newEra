@@ -154,7 +154,7 @@ export function AppSidebar({
         </div>
 
         {/* Scrollable Navigation */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 [scrollbar-width:thin] [scrollbar-color:#ff810a_transparent]">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
           {/* Main section */}
           <div className="space-y-1">
             {!isCollapsed && (

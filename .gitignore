@@ -8,3 +8,5 @@ coverage/
 /dist/
 .vinext/
 .cloudflare/
+
+docs/*
