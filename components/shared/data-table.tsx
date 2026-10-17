@@ -219,7 +219,7 @@ export function DataTable<T extends Record<string, any>>({
                       <button
                         type="button"
                         onClick={() => handleSort(String(col.accessorKey))}
-                        className="inline-flex items-center gap-1.5 font-medium hover:text-foreground transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 font-medium hover:text-foreground transition-colors cursor-pointer select-none focus:outline-hidden"
                       >
                         <span>{col.header}</span>
                         {isSorted ? (

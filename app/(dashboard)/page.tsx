@@ -16,6 +16,7 @@ import {
   Award,
   ShieldCheck,
   FileSpreadsheet,
+  LogIn,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -275,6 +276,23 @@ export default function DashboardPage() {
               <Link href="/menu">
                 <Button variant="outline" size="sm" className="w-full text-xs h-7 mt-1 bg-card">
                   Kelola Matriks Hak Akses
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-card">
+            <CardContent className="p-4 space-y-2">
+              <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
+                <LogIn className="h-4 w-4 text-primary" />
+                <span>Halaman Login (login-04)</span>
+              </div>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                Halaman otentikasi mandiri berbasis shadcn block login-04 dengan palet warna sistem, form validasi, dan social login.
+              </p>
+              <Link href="/login">
+                <Button variant="outline" size="sm" className="w-full text-xs h-7 mt-1 border-primary/30 text-primary hover:bg-primary/10">
+                  Buka Halaman Login
                 </Button>
               </Link>
             </CardContent>

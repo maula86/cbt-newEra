@@ -24,7 +24,7 @@ export default function DashboardLayout({
   }, [isDarkMode]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-foreground">
+    <div className="flex h-screen h-[100dvh] w-full overflow-hidden bg-background text-foreground">
       {/* Sidebar-07 (Fixed frame with scrollable inner menu) */}
       <AppSidebar
         isMobileOpen={mobileSidebarOpen}
@@ -33,17 +33,17 @@ export default function DashboardLayout({
       />
 
       {/* Main View Area */}
-      <div className="flex flex-1 flex-col h-screen overflow-hidden min-w-0">
+      <div className="flex flex-1 flex-col h-full min-h-0 overflow-hidden min-w-0">
         <AppHeader
           onOpenMobile={() => setMobileSidebarOpen(true)}
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
         />
 
-        {/* Outer Main Content: 100% FIXED, NO SCROLL Y (Hapus Scroll Y - jadikan Ukuran Fixing) */}
-        <main className="flex-1 min-h-0 h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-hidden min-w-0 flex flex-col w-full">
-          {/* Inner Main Content: SCROLLS Y (main Content Dalam dapat diScroll) */}
-          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden w-full max-w-none p-4 sm:p-6 lg:p-8 pb-16 animate-in fade-in duration-200">
+        {/* Outer Main Content: Takes remaining vertical space, isolates scroll */}
+        <main className="flex-1 min-h-0 overflow-hidden min-w-0 flex flex-col w-full relative">
+          {/* Inner Main Content: Smooth vertical scroll container */}
+          <div className="flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden w-full max-w-none p-4 sm:p-6 lg:p-8 overscroll-contain">
             {children}
           </div>
         </main>

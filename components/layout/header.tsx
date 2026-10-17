@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Menu, Sun, Moon, RotateCcw, Shield, Building, Sparkles, PanelLeftClose, PanelLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Menu, Sun, Moon, RotateCcw, Shield, Building, Sparkles, PanelLeftClose, PanelLeft, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useConfigStore } from '@/store/useConfigStore';
 import { useMasterStore } from '@/store/useMasterStore';
@@ -119,6 +120,16 @@ export function AppHeader({
           >
             {isDarkMode ? <Sun className="h-4 w-4 text-amber-500" /> : <Moon className="h-4 w-4 text-foreground" />}
           </Button>
+
+          {/* Ke Halaman Login */}
+          <Link
+            href="/login"
+            className="h-8 px-2.5 text-xs inline-flex items-center gap-1.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted hover:border-primary/40 hover:text-primary transition-colors shadow-2xs font-medium"
+            title="Buka Halaman Login"
+          >
+            <LogOut className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="hidden sm:inline">Login Page</span>
+          </Link>
         </div>
       </header>
 

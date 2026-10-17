@@ -9,7 +9,11 @@ interface ConfigState {
   permissionTree: PermissionNode[];
   activeRoleId: string;
   isDarkMode: boolean;
+  isAuthenticated: boolean;
+  userEmail: string;
 
+  login: (email: string) => void;
+  logout: () => void;
   setActiveRoleId: (roleId: string) => void;
   toggleDarkMode: () => void;
   setDarkMode: (val: boolean) => void;
@@ -36,6 +40,20 @@ export const useConfigStore = create<ConfigState>()(
       permissionTree: mockPermissionTree,
       activeRoleId: 'role-1', // Default Super Admin
       isDarkMode: false,
+      isAuthenticated: true,
+      userEmail: 'admin@cbtplatform.ac.id',
+
+      login: (email: string) =>
+        set({
+          isAuthenticated: true,
+          userEmail: email,
+        }),
+
+      logout: () =>
+        set({
+          isAuthenticated: false,
+          userEmail: '',
+        }),
 
       setActiveRoleId: (roleId) => set({ activeRoleId: roleId }),
 

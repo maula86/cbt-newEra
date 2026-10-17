@@ -743,7 +743,7 @@ export function ButirSoalView() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0 pb-6">
       {/* Page Header */}
       <PageHeader
         title={

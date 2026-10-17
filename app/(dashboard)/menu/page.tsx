@@ -42,19 +42,23 @@ function MenuRBACContent() {
   } = useConfigStore();
   const { userRoles, schools } = useMasterStore();
 
-  const [selectedRoleId, setSelectedRoleId] = React.useState<string>(
-    queryRoleId || activeRoleId || 'role-1'
-  );
+  const [userSelectedRoleId, setUserSelectedRoleId] = React.useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsedNodes, setCollapsedNodes] = React.useState<Record<string, boolean>>({});
 
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
 
+  // Resolved role: priority to user selection on page, then query string param, then active simulated role, fallback to 'role-1'
+  const selectedRoleId = userSelectedRoleId || queryRoleId || activeRoleId || 'role-1';
+  const setSelectedRoleId = (roleId: string) => setUserSelectedRoleId(roleId);
+
+  const activeMatchedRole = userRoles.find((r) => r.id === selectedRoleId);
+
   const currentRoleConfig = roleConfigs[selectedRoleId] || {
     roleId: selectedRoleId,
-    roleCode: 'CUSTOM',
-    roleName: 'Peran Terpilih',
+    roleCode: activeMatchedRole?.code || 'CUSTOM',
+    roleName: activeMatchedRole?.name || 'Peran Terpilih',
     scopeType: 'global',
     permissions: {},
   };
